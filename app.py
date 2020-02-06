@@ -5,9 +5,9 @@ from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
-from models import db, User, Group_Applicant, Group, Applicant
-
+from models import db
+from admin import admin
+from migrate import migrate
 from views import *
 
 
