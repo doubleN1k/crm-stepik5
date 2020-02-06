@@ -1,5 +1,5 @@
 from flask import Flask
-
+print(1)
 from forms import LoginForm, RegistrationForm, ChangePassordForm
 from config import Config
 
@@ -11,5 +11,5 @@ from migrate import migrate
 from views import *
 
 
-if __name__ == '__main__':
-    app.run()
+'''if __name__ == '__main__':
+    app.run()'''
