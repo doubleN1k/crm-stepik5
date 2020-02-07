@@ -3,12 +3,13 @@ from sqlalchemy.sql import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import app
 from datetime import datetime
+
 db = SQLAlchemy(app)
 
 
 class User(db.Model):
     __tablename__ = 'User'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     login = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), nullable=False)
@@ -23,19 +24,21 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+
 class Group(db.Model):
     __tablename__ = 'Group'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(200), nullable=False)
     status = db.Column(db.String, nullable=False)
     course = db.Column(db.String, nullable=False)
-    date_start = db.Column(db.String(10), nullable=False)
+    date_start = db.Column(db.DateTime, nullable=True)
     amount_student = db.Column(db.Integer, nullable=False)
     max_student = db.Column(db.Integer, nullable=False)
     applicant = db.relationship('Applicant', back_populates='group')
 
     def __repr__(self):
         return '{}'.format(self.title)
+
 
 class Applicant(db.Model):
     __tablename__ = 'Applicant'
@@ -52,13 +55,22 @@ class Applicant(db.Model):
         return '{}'.format(self.group_title)
 
 
-
 #db.create_all()
-if __name__=='__main__':
-    '''user1 = User(name='Nik', login='admin', email='bloodyn1k@yandex.ru', password_hash='123456789')
+if __name__ == '__main__':
+    db.create_all()
+    user1 = User(name='Nik', login='admin', email='bloodyn1k@yandex.ru', password_hash='123456789')
+    user2 = User(name='Max', login='moder', email='bloodyn1k@yandex.com', password_hash='789456123')
     db.session.add(user1)
-    group1 = Group(title='Основы Python март', status='Идет набор', course='Python', date_start='01.03.2020', amount_student=8, max_student=10)
+    db.session.add(user2)
+    group1 = Group(title='Основы Python март', status='Идет набор', course='Python', amount_student=8, max_student=10)
+    group2 = Group(title='Основы VueJS март', status='Набрано', course='VueJS', amount_student=10, max_student=10)
     db.session.add(group1)
-    applicant1 = Applicant(name_std='Вася Курочкина', tel_number_std='+797847227', email='bloodyn1k@yandex.com', course='Python', status='Распределена', group_id=2)
+    db.session.add(group2)
+    db.session.commit()
+    applicant1 = Applicant(name_std='Вася Курочкина', tel_number_std='+797847227', email='bloodyn1k@yandex.com',
+                           course='Python', status='Новая', group_title='Основы Python март')
+    applicant2 = Applicant(name_std='Оля Буравкина', tel_number_std='+797844527', email='bloodyn1k@yandex.com',
+                           course='VueJS', status='Распределена', group_title='Основы VueJS март')
     db.session.add(applicant1)
-    db.session.commit()'''
+    db.session.add(applicant2)
+    db.session.commit()

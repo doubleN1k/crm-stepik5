@@ -1,9 +1,7 @@
-from flask_admin import Admin, BaseView
+from flask_admin import Admin, BaseView, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from app import app
 from models import db, User, Group, Applicant
-
-admin = Admin(app)
 
 
 class GroupModelView(ModelView):
@@ -16,8 +14,19 @@ class ApplicantModelView(ModelView):
                          group='Группа')
     column_list = ('name_std', 'tel_number_std', 'email', 'course', 'status', 'group')
 
+
+class DashboardView(AdminIndexView):
+    @expose()
+    def dashboard_view(self):
+        group_rows = db.session.query(Group).limit(3)
+        group_dashboard = {}
+        for group in group_rows:
+            group_dashboard[group.id]={'title': group.title},
+        return self.render('admin/admin_dashboard.html')
+
+
+admin = Admin(app, index_view=DashboardView(), template_mode='bootstrap3')
+
 admin.add_view(ApplicantModelView(Applicant, db.session, name='Заявки'))
 admin.add_view(GroupModelView(Group, db.session, name='Группы'))
 admin.add_view(ModelView(User, db.session, name='Пользователи'))
-
-
