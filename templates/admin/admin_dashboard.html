@@ -37,20 +37,19 @@
                 <br>
                 <table class="table">
                     <tr>
-                        <td><a href="/">Vue js январь</a></td>
-                        <td>8 / 10 набрано</td>
-                        <td>есть места</td>
-                    </tr>
+                {% for group_id, group_val  in group_dashboard.items(): %}
                     <tr>
-                        <td><a href="/">Flask февраль</a></td>
-                        <td>10 / 10 набрано</td>
-                        <td>нет мест</td>
+                        <td><a href="/admin/group/edit/?id={{group_id}}&url=/admin/group/">{{group_val.title}}</a></td>
+                        <td>{{group_val.amount_student}} / {{group_val.max_student}} набрано</td>
+                        <td>
+                            {% if group_val.amount_student==group_val.max_student %}
+                                нет мест
+                            {% else %}
+                                есть места
+                            {% endif %}
+                        </td>
                     </tr>
-                    <tr>
-                        <td><a href="/">Django февраль</a></td>
-                        <td>6 / 10 набрано</td>
-                        <td>есть места</td>
-                    </tr>
+                {% endfor %}
                 </table>
 
             </div>

@@ -18,11 +18,20 @@ class ApplicantModelView(ModelView):
 class DashboardView(AdminIndexView):
     @expose()
     def dashboard_view(self):
-        group_rows = db.session.query(Group).limit(3)
-        group_dashboard = {}
+        group_rows = db.session.query(Group).order_by(Group.id.desc()).limit(5)
+        applicant_rows = db.session.query(Applicant).filter(Applicant.status=='Новая').all()
+        applicant_distributed = db.session.query(Applicant).filter(Applicant.status=='Новая').count()
+        applicant_unpaid = db.session.query(Applicant).filter(Applicant.status=='Новая').count()
+        applicant_new = len(applicant_rows)
+        group_dashboard, applicant_dashboard = dict(), dict()
         for group in group_rows:
-            group_dashboard[group.id]={'title': group.title},
-        return self.render('admin/admin_dashboard.html')
+            group_dashboard[group.id] = {'title': group.title, 'amount_student': group.amount_student,
+                                         'max_student': group.max_student}
+        for applicant in applicant_rows:
+            applicant_dashboard[applicant.id] = {'group_title': applicant.group_title, 'name_std': applicant.name_std}
+        return self.render('admin/admin_dashboard.html', group_dashboard=group_dashboard, applicant_dashboard=applicant_dashboard)
+
+    # 'amount_student', 'applicant', 'course', 'date_start', 'id', 'max_student','status', 'title'
 
 
 admin = Admin(app, index_view=DashboardView(), template_mode='bootstrap3')
