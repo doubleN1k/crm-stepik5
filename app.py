@@ -1,5 +1,4 @@
 from flask import Flask
-print(1)
 from forms import LoginForm, RegistrationForm, ChangePassordForm
 from config import Config
 

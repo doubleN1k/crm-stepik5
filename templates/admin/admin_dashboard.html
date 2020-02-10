@@ -4,35 +4,27 @@
     <div class="row">
         <div class="col-md-6">
             <div class="well">
-
                 <h2>Заявки</h2>
-                <p>150 всего 95 распределены 65 не распределены</p>
-
+                <p>Всего заявок: {{applicant_stat.distributed+applicant_stat.new+applicant_stat.unpaid}}.
+                    Распределено: {{applicant_stat.distributed}}.
+                    Оплачено: {{applicant_stat.unpaid}}
+                    Новых: {{applicant_stat.new}}
+                </p>
                 <h3>Новые заявки</h3>
                 <table class="table">
+                    {% for applicant_id, applicant_val  in applicant_dashboard.items(): %}
                     <tr>
-                        <td><a href="/">Vue js январь</a></td>
-                        <td>8 / 10 набрано</td>
-                        <td>есть места</td>
+                        <td><a href="/admin/applicant/edit/?id={{applicant_id}}&url=/admin/applicant/">{{applicant_val.group_title}}</a></td>
+                        <td>{{applicant_val.name_std}}</td>
                     </tr>
-                    <tr>
-                        <td><a href="/">Flask февраль</a></td>
-                        <td>10 / 10 набрано</td>
-                        <td>нет мест</td>
-                    </tr>
-                    <tr>
-                        <td><a href="/">Django февраль</a></td>
-                        <td>6 / 10 набрано</td>
-                        <td>есть места</td>
-                    </tr>
+                    {% endfor %}
                 </table>
                 <br>
-                <a href="" class></a>
+                <a href="/admin/applicant/" class="btn btn-primary" role="button">Перейти к заявкам</a>
             </div>
         </div>
         <div class="col-md-6">
             <div class="well">
-
                 <h2>Группы</h2>
                 <br>
                 <table class="table">
@@ -51,7 +43,8 @@
                     </tr>
                 {% endfor %}
                 </table>
-
+                <br>
+                <a href="/admin/group/" class="btn btn-primary" role="button">Перейти к группам</a>
             </div>
         </div>
     </div>
