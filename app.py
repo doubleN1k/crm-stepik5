@@ -1,14 +1,5 @@
-from flask import Flask
-from forms import LoginForm, RegistrationForm, ChangePassordForm
-from config import Config
-
-app = Flask(__name__)
-app.config.from_object(Config)
-from models import db
-from admin import admin
-from migrate import migrate
-from views import *
+from app import app
 
 
-'''if __name__ == '__main__':
-    app.run()'''
+if __name__ == '__main__':
+    app.run(debug=True)

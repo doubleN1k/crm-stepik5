@@ -1,9 +1,5 @@
-from flask import abort, flash, session, request, redirect, render_template
 from app import app
-from models import User
-from forms import LoginForm, RegistrationForm, ChangePassordForm
-
-
+print('routes')
 # ------------------------------------------------------
 # Декораторы авторизации
 def login_required(f):

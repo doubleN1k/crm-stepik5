@@ -1,8 +1,8 @@
 from flask_admin import Admin, BaseView, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
-from app import app
-from models import db, User, Group, Applicant
-
+from app import app, db
+from app.models import User, Group, Applicant
+print('admin')
 
 class GroupModelView(ModelView):
     column_labels = dict(title='Название', status='Статус', course='Предмет', date_start='Старт',
@@ -48,10 +48,9 @@ class DashboardView(AdminIndexView):
 
 
 class EditMailView(BaseView):
-    @expose('/<applicant_id>')
-    def index(self, applicant_id):
-        applicant_id = applicant_id
-        return self.render('admin/admin_mail_edit.html', applicant_id=applicant_id)
+    @expose('/')
+    def index(self):
+        return self.render('admin/admin_mail_edit.html')
 
 
 admin = Admin(app, index_view=DashboardView(), template_mode='bootstrap3', name='STEP-CRM')
