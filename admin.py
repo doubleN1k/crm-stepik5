@@ -26,7 +26,7 @@ class ApplicantModelView(ModelView):
             ('Распределена', 'Распределена')
         ]
     }
-    list_template = '/admin/custom_list.html'
+    list_template = '/admin/add_mail_action.html'
 
 
 class DashboardView(AdminIndexView):
@@ -46,18 +46,17 @@ class DashboardView(AdminIndexView):
         return self.render('admin/admin_dashboard.html', group_dashboard=group_dashboard,
                            applicant_dashboard=applicant_dashboard, applicant_stat=applicant_stat)
 
-    # 'amount_student', 'applicant', 'course', 'date_start', 'id', 'max_student','status', 'title'
 
-
-class SentMailView(BaseView):
-    @expose('/')
-    def index(self):
-        return self.render('admin/admin_mail_edit.html')
+class EditMailView(BaseView):
+    @expose('/<applicant_id>')
+    def index(self, applicant_id):
+        applicant_id = applicant_id
+        return self.render('admin/admin_mail_edit.html', applicant_id=applicant_id)
 
 
 admin = Admin(app, index_view=DashboardView(), template_mode='bootstrap3', name='STEP-CRM')
 
+admin.add_view(EditMailView(name='Рассылка', endpoint='sent_mail'))
 admin.add_view(ApplicantModelView(Applicant, db.session, name='Заявки'))
 admin.add_view(GroupModelView(Group, db.session, name='Группы'))
 admin.add_view(ModelView(User, db.session, name='Пользователи'))
-admin.add_view(SentMailView(name='Рассылка', endpoint='sent_mail'))
