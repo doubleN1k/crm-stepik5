@@ -48,9 +48,9 @@ class DashboardView(AdminIndexView):
 
 
 class EditMailView(BaseView):
-    @expose('/')
-    def index(self):
-        return self.render('admin/admin_mail_edit.html')
+    @expose('/<applicant_id>')
+    def index(self, applicant_id):
+        return self.render('admin/admin_mail_edit.html', applicant_id=applicant_id)
 
 
 admin = Admin(app, index_view=DashboardView(), template_mode='bootstrap3', name='STEP-CRM')
