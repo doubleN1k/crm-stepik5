@@ -1,0 +1,7 @@
+{% extends 'admin/model/list.html' %}
+{% block list_row_actions %}
+    {{ super() }}
+    <a class="icon" href="/admin/sent_mail/{{ get_pk_value(row) }}" title="Написать e-mail">
+        <span class="fa fa-pencil glyphicon glyphicon-envelope"></span>
+    </a>
+{% endblock %}

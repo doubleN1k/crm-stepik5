@@ -26,6 +26,7 @@ class ApplicantModelView(ModelView):
             ('Распределена', 'Распределена')
         ]
     }
+    list_template = '/admin/custom_list.html'
 
 
 class DashboardView(AdminIndexView):
