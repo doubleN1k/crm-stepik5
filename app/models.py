@@ -1,8 +1,13 @@
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db
-print('models')
+from flask_login import UserMixin
+from app import db, login
 
-class User(db.Model):
+
+@login.user_loader
+def load_user(id):
+    return db.session.query(User).get(id)
+
+class User(db.Model, UserMixin):
     __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
@@ -10,8 +15,9 @@ class User(db.Model):
     email = db.Column(db.String(200), nullable=False)
     password_hash = db.Column(db.String, nullable=False)
 
-    def __repr__(self):
-        return '{}'.format(self.name)
+    @property
+    def password(self):
+        raise AttributeError("Вам не нужно знать пароль!")
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -50,13 +56,13 @@ class Applicant(db.Model):
         return '{}'.format(self.group_title)
 
 
-#db.create_all()
+# db.create_all()
 if __name__ == '__main__':
     db.create_all()
-    user1 = User(name='Nik', login='admin', email='bloodyn1k@yandex.ru', password_hash='123456789')
-    user2 = User(name='Max', login='moder', email='bloodyn1k@yandex.com', password_hash='789456123')
+    user1 = User(name='Nik', login='admin', email='bloodyn1k@yandex.ru', password='1234')
+    # user2 = User(name='Max', login='moder', email='bloodyn1k@yandex.com', password_hash='789456123')
     db.session.add(user1)
-    db.session.add(user2)
+    # db.session.add(user2)
     group1 = Group(title='Основы Python март', status='Идет набор', course='Python', amount_student=8, max_student=10)
     group2 = Group(title='Основы VueJS март', status='Набрано', course='VueJS', amount_student=10, max_student=10)
     db.session.add(group1)

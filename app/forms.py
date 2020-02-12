@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField, TextAreaField
-from wtforms.validators import DataRequired, Email, Length
-print('forms')
+from wtforms import StringField, SubmitField, HiddenField, TextAreaField, PasswordField
+from wtforms.validators import DataRequired, Email
+
 
 class MailForm(FlaskForm):
     mail = StringField('e-mail', validators=[DataRequired(), Email()])
@@ -10,17 +10,18 @@ class MailForm(FlaskForm):
     submit = SubmitField('Отправить')
 
 
-def password_check(form, field):
-    pass
-
-
 class LoginForm(FlaskForm):
-    pass
-
+    mail = StringField('e-mail', validators=[DataRequired(), Email()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    submit = SubmitField('Войти')
 
 class RegistrationForm(FlaskForm):
     pass
 
 
 class ChangePassordForm(FlaskForm):
+    pass
+
+
+def password_check(form, field):
     pass
