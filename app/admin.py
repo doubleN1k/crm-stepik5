@@ -1,8 +1,13 @@
+from flask import request
 from flask_admin import Admin, BaseView, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from app import app, db
 from app.models import User, Group, Applicant
+from app.forms import MailForm
+from app.mailer import send_mail
+
 print('admin')
+
 
 class GroupModelView(ModelView):
     column_labels = dict(title='Название', status='Статус', course='Предмет', date_start='Старт',
@@ -48,9 +53,22 @@ class DashboardView(AdminIndexView):
 
 
 class EditMailView(BaseView):
-    @expose('/<applicant_id>')
-    def index(self, applicant_id):
-        return self.render('admin/admin_mail_edit.html', applicant_id=applicant_id)
+    @expose('/',  methods=['POST', 'GET'])
+    def index(self):
+        mail_form = MailForm()
+        if mail_form.validate_on_submit():
+            mail = mail_form.mail.data
+            subject = mail_form.subject.data
+            text = mail_form.text.data
+            send_mail(subject, list(mail), text)
+            return 'проверяем'
+        else:
+            applicant_id = request.args.get('applicant_id')
+            applicant_row = db.session.query(Applicant).filter(Applicant.id == applicant_id).first()
+            applicant_student = {'id': applicant_row.id, 'mail': applicant_row.email,
+                                 'name_student': applicant_row.name_std, 'group': applicant_row.group_title,
+                                 'status_applicant': applicant_row.status}
+            return self.render('admin/admin_mail_edit.html', applicant_student=applicant_student, mail_form=mail_form)
 
 
 admin = Admin(app, index_view=DashboardView(), template_mode='bootstrap3', name='STEP-CRM')
